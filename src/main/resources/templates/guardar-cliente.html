@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{estilosForm.css}">
+</head>
+<body>
+<div class="registration-form">
+    <form action="/clientes/guardar" method="post">
+        <div class="form-icon">
+            <span><i class="icon icon-ghost"></i></span>
+        </div>
+        <div th:if="${cliente.getNombre() == null}">Nuevo cliente</div>
+        <div th:unless="${cliente.getNombre == null}">Editar cliente</div>
+        <input type="hidden" name="idcliente" th:value="${cliente.getIdcliente()}">
+        <br />
+        <div class="form-group">
+            <input type="text" class="form-control item" name="nombre" placeholder="Nombre" th:value="${cliente.getNombre()}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control item" name="cargo" placeholder="Cargo" th:value="${cliente.getCargo()}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control item" name="empresa" placeholder="Empresa" th:value="${cliente.getEmpresa}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control item" name="telefono" placeholder="Telefono" th:value="${cliente.getTelefono}"   >
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control item" name="mail" placeholder="Correo" th:value="${cliente.getMail}">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-block create-account">Guardar</button>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="history.back()" class="btn btn-block create-account boton-blanco">Cancelar</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

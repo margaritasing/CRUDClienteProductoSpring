@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h2>Todos los productos</h2>
+<form class="formBuscar" id="formBuscar" method="get" action="/productos/buscar">
+    <div>Buscar por nombre o ID:</div><br />
+    <input type="search" placeholder="Buscar por nombre o ID" name="nombreORid">
+    <br /><br />
+    <a href="#" id="buscarBtn" class="boton azul">Buscar</a>
+    <a href="/productos/nuevo" class="boton azul">Crear nuevo</a>
+    <a href="/productos" class="boton azul">Ver todos</a>
+</form>
+<br />
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+        <tr>
+            <th>ID producto</th>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Codigo Producto</th>
+            <th>Descripcion</th>
+            <th>Precio Unitario</th>
+            <th>Stock</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${producto.isEmpty()}">
+            <td colspan="6"> No se encontraron animales </td>
+        </tr>
+        <tr th:each="producto : ${producto}">
+            <td th:id="'animal'+${producto.getIdproducto}"><span th:text="${producto.getIdproducto}"> ID animal </span></td>
+            <td><span th:text="${producto.getNombre}"> Nombre </span></td>
+            <td><span th:text="${producto.getCategoria}"> Categoria </span></td>
+            <td><span th:text="${producto.getCodigoproducto}"> Codigo Producto </span></td>
+            <td><span th:text="${producto.getDescripcion}"> Descripcion </span></td>
+            <td><span th:text="${producto.getPreciounitario}"> Precio Unitario </span></td>
+            <td><span th:text="${producto.getStock}"> Stock </span></td>
+
+            <td><a href="#" class="icono editar" th:id="${producto.getIdproducto}"><i class="icon-pencil" title="Editar"></i></a></td>
+            <td><a href="#" class="icono borrar" th:id="${producto.getIdproducto}"><i class="icon-trash" title="Borrar"></i></a></td>
+        </tr>
+        <tbody>
+    </table>
+</div>
+</body>
+<script>
+    $(".editar").click(function(){
+        $(location).attr('href','/productos/editar/'+this.id);
+    });
+
+    $(".borrar").click(function(){
+        var itemID = $(this).attr("id");
+        $.ajax({
+            url: '/productos/borrar/'+itemID,
+            type: 'DELETE',
+            complete: function(data){
+                $("#cliente"+itemID).parent().slideUp("slow");
+            }
+        });
+    });
+
+    $("#buscarBtn").click(function(){
+        $("#formBuscar").submit();
+    });
+</script>

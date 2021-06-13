@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h2>Todos los clientes</h2>
+<form class="formBuscar" id="formBuscar" method="get" action="/clientes/buscar">
+    <div>Buscar por nombre o ID:</div><br />
+    <input type="search" placeholder="Buscar por nombre o ID" name="nombreORid">
+     <select class="form-control" name="empresa">
+        <option value="0" text="Buscar por Empresa" selected />
+        <option th:each="color : ${empresa}" th:value="${empresa}" th:text="${empresa}"></option>
+    </select>
+    <br /><br />
+    <a href="#" id="buscarBtn" class="boton azul">Buscar</a>
+    <a href="/animales/nuevo" class="boton azul">Crear nuevo</a>
+    <a href="/animales" class="boton azul">Ver todos</a>
+</form>
+<br />
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+        <tr>
+            <th>ID cliente</th>
+            <th>Nombre</th>
+            <th>Cargo</th>
+            <th>Empresa</th>
+            <th>Telefono</th>
+            <th>Email</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${clientes.isEmpty()}">
+            <td colspan="6"> No se encontraron animales </td>
+        </tr>
+        <tr th:each="cliente : ${cliente}">
+            <td th:id="'animal'+${cliente.getIdCliente}"><span th:text="${cliente.getIdCliente}"> ID animal </span></td>
+            <td><span th:text="${cliente.getNombre}"> Nombre </span></td>
+            <td><span th:text="${cliente.getCargo}"> Cargo </span></td>
+            <td><span th:text="${cliente.getEmpresa}"> Empresa </span></td>
+            <td><span th:text="${cliente.getTelefono}"> Telefono </span></td>
+            <td><span th:text="${cliente.getMail}"> Mail </span></td>
+            <td><a href="#" class="icono editar" th:id="${cliente.getIdCliente}"><i class="icon-pencil" title="Editar"></i></a></td>
+            <td><a href="#" class="icono borrar" th:id="${cliente.getIdCliente}"><i class="icon-trash" title="Borrar"></i></a></td>
+        </tr>
+        <tbody>
+    </table>
+</div>
+</body>
+<script>
+    $(".editar").click(function(){
+        $(location).attr('href','/clientes/editar/'+this.id);
+    });
+
+    $(".borrar").click(function(){
+        var itemID = $(this).attr("id");
+        $.ajax({
+            url: '/clientes/borrar/'+itemID,
+            type: 'DELETE',
+            complete: function(data){
+                $("#cliente"+itemID).parent().slideUp("slow");
+            }
+        });
+    });
+
+    $("#buscarBtn").click(function(){
+        $("#formBuscar").submit();
+    });
+    </script>
